@@ -1,0 +1,623 @@
+MariaDB [toyu]> SELECT DISTINCT Course.rubric, Course.number, Course.title, Class.classId, Class.facId, Class.year, Class.semester 
+    -> FROM Course AS co
+    -> INNER JOIN Class AS cl ON cl.courseId = co.courseId
+    -> WHERE co.rubric = 'CSCI' OR co.rubric = 'CINF';
+ERROR 1054 (42S22): Unknown column 'Course.rubric' in 'field list'
+MariaDB [toyu]> SELECT DISTINCT Course.rubric, Course.number, Course.title, Class.classId, Class.facId, Class.year, Class.semester 
+    -> FROM Course AS co
+    -> INNER JOIN Class AS cl ON cl.courseId = co.courseId
+    ->  WHERE co.rubric = 'CSCI' OR co.rubric = 'CINF';
+ERROR 1054 (42S22): Unknown column 'Course.rubric' in 'field list'
+MariaDB [toyu]> SELECT DISTINCT Course.rubric, Course.number, Course.title, Class.classId, Class.facId, Class.year, Class.semester 
+    -> 
+    -> SELECT DISTINCT cs.rubric, cs.number, cs.title, cl.classID, cl.facId, cl.year, cl.semester
+    -> 
+    -> FROM Course AS cs
+    -> 
+    -> inner join Class As cl on cl.courseId = co.courseId
+    -> 
+    -> WHERE co.rubric = 'CSCI' OR co.rubric = 'CINF';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'SELECT DISTINCT cs.rubric, cs.number, cs.title, cl.classID, cl.facId, cl.year...' at line 3
+MariaDB [toyu]> SELECT DISTINCT cs.rubric, cs.number, cs.title, cl.classID, cl.facId, cl.year, cl.semester
+    -> 
+    -> FROM Course AS cs
+    -> 
+    -> inner join Class As cl on cl.courseId = co.courseId
+    -> 
+    -> WHERE co.rubric = 'CSCI' OR co.rubric = 'CINF';
+ERROR 1054 (42S22): Unknown column 'co.rubric' in 'where clause'
+MariaDB [toyu]> 
+MariaDB [toyu]> SELECT DISTINCT cs.rubric, cs.number, cs.title, cl.classID, cl.facId, cl.year, cl.semester
+    -> 
+    -> FROM Course AS cs
+    -> 
+    -> inner join Class As cl on cl.courseId = co.courseId
+    -> 
+    -> WHERE cs.rubric = 'CSCI' OR cs.rubric = 'CINF';
+ERROR 1054 (42S22): Unknown column 'co.courseId' in 'on clause'
+MariaDB [toyu]> SELECT DISTINCT cs.rubric, cs.number, cs.title, cl.classID, cl.facId, cl.year, cl.semester
+    -> 
+    -> FROM Course AS cs
+    -> 
+    -> inner join Class As cl on cl.courseId = cs.courseId
+    -> 
+    -> WHERE cs.rubric = 'CSCI' OR cs.rubric = 'CINF';
++--------+--------+-------------------------------------+---------+-------+------+----------+
+| rubric | number | title                               | classID | facId | year | semester |
++--------+--------+-------------------------------------+---------+-------+------+----------+
+| CSCI   | 3333   | Data Structures                     |   10000 |  1011 | 2019 | Fall     |
+| CSCI   | 3333   | Data Structures                     |   11000 |  1011 | 2020 | Spring   |
+| CSCI   | 4333   | Design of Database Systems          |   10001 |  1011 | 2019 | Fall     |
+| CSCI   | 4333   | Design of Database Systems          |   11001 |  1012 | 2020 | Spring   |
+| CSCI   | 5333   | DBMS                                |   10002 |  1012 | 2019 | Fall     |
+| CSCI   | 5333   | DBMS                                |   11002 |  1013 | 2020 | Spring   |
+| CINF   | 3321   | Introduction to Information Systems |   10003 |  1014 | 2019 | Fall     |
+| CINF   | 3321   | Introduction to Information Systems |   11003 |  1016 | 2020 | Spring   |
+| CINF   | 4320   | Web Application Development         |   10004 |  1014 | 2019 | Fall     |
++--------+--------+-------------------------------------+---------+-------+------+----------+
+9 rows in set (0.017 sec)
+
+MariaDB [toyu]> SELECT CONCAT cs.[rubric] + ' '+ [number] AS COurse, cs.title, cl.classID, cl.faceId, fl.deptCode AS instructor dept
+    -> 
+    -> FROM Course AS cs 
+    -> 
+    -> inner join Class As cl on cl.courseId = cs.courseId
+    -> inner hoin faculty as fl on fl.facId =cl.facId
+    -> WHERE fl.deptCode = 'CSCI';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '.[rubric] + ' '+ [number] AS COurse, cs.title, cl.classID, cl.faceId, fl.dept...' at line 1
+MariaDB [toyu]> 
+MariaDB [toyu]> SELECT CONCAT (cs.rubric + ' '+ number) AS COurse, cs.title, cl.classID, cl.faceId, fl.deptCode AS instructor dept
+    -> 
+    -> FROM Course AS cs 
+    -> 
+    -> inner join Class As cl on cl.courseId = cs.courseId
+    -> inner hoin faculty as fl on fl.facId =cl.facId
+    -> WHERE fl.deptCode = 'CSCI';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'dept
+
+FROM Course AS cs 
+
+inner join Class As cl on cl.courseId = cs.courseId...' at line 1
+MariaDB [toyu]> SELECT CONCAT (cs.rubric + ' '+ number) AS Course, cs.title, cl.classID, cl.faceId, fl.deptCode AS instructor dept
+    -> 
+    -> FROM Course AS cs 
+    -> 
+    -> inner join Class As cl on cl.courseId = cs.courseId
+    -> inner hoin faculty as fl on fl.facId =cl.facId
+    -> WHERE fl.deptCode = 'CSCI';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'dept
+
+FROM Course AS cs 
+
+inner join Class As cl on cl.courseId = cs.courseId...' at line 1
+MariaDB [toyu]> SELECT CONCAT (cs.rubric,' ',number) AS Course, cs.title, cl.classID, cl.faceId, fl.deptCode AS instructor dept
+    -> 
+    -> FROM Course AS cs 
+    -> 
+    -> inner join Class As cl on cl.courseId = cs.courseId
+    -> inner hoin faculty as fl on fl.facId =cl.facId
+    -> WHERE fl.deptCode = 'CSCI';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'dept
+
+FROM Course AS cs 
+
+inner join Class As cl on cl.courseId = cs.courseId...' at line 1
+MariaDB [toyu]> 
+MariaDB [toyu]> SELECT CONCAT (cs.rubric,' ',cs.number) AS Course, cs.title, cl.classID, cl.faceId, fl.deptCode AS instructor dept
+    -> 
+    -> FROM Course AS cs 
+    -> 
+    -> inner join Class As cl on cl.courseId = cs.courseId
+    -> inner hoin faculty as fl on fl.facId =cl.facId
+    -> WHERE fl.deptCode = 'CSCI';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'dept
+
+FROM Course AS cs 
+
+inner join Class As cl on cl.courseId = cs.courseId...' at line 1
+MariaDB [toyu]> ]SELECT CONCAT (cs.rubric,' ',cs.number) AS Course, cs.title, cl.classID, cl.faceId, fl.deptCode AS "instructor dept"
+    -> 
+    -> FROM Course AS cs 
+    -> 
+    -> inner join Class As cl on cl.courseId = cs.courseId
+    -> inner hoin faculty as fl on fl.facId =cl.facId
+    -> WHERE fl.deptCode = 'CSCI';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ']SELECT CONCAT (cs.rubric,' ',cs.number) AS Course, cs.title, cl.classID, cl....' at line 1
+MariaDB [toyu]> SELECT CONCAT (cs.rubric,' ',cs.number) AS Course, cs.title, cl.classID, cl.faceId, fl.deptCode AS "instructor dept"
+    -> FROM Course AS cs 
+    -> INNER JOIN Class AS cl ON cl.courseId = cs.courseId
+    -> INNER JOIN Faculty AS fl ON fl.facId =cl.facId
+    -> WHERE fl.deptCode = 'CSCI';
+ERROR 1054 (42S22): Unknown column 'cl.faceId' in 'field list'
+MariaDB [toyu]> SELECT CONCAT (cs.rubric,' ',cs.number) AS Course, cs.title, cl.classID, cl.facId, fl.deptCode AS "instructor dept"
+    -> FROM Course AS cs 
+    -> INNER JOIN Class AS cl ON cl.courseId = cs.courseId
+    -> INNER JOIN Faculty AS fl ON fl.facId =cl.facId
+    -> WHERE fl.deptCode = 'CSCI';
++-----------+-------------------------------------+---------+-------+-----------------+
+| Course    | title                               | classID | facId | instructor dept |
++-----------+-------------------------------------+---------+-------+-----------------+
+| CSCI 3333 | Data Structures                     |   10000 |  1011 | CSCI            |
+| CSCI 4333 | Design of Database Systems          |   10001 |  1011 | CSCI            |
+| CSCI 3333 | Data Structures                     |   11000 |  1011 | CSCI            |
+| CSCI 5333 | DBMS                                |   10002 |  1012 | CSCI            |
+| CSCI 4333 | Design of Database Systems          |   11001 |  1012 | CSCI            |
+| CSCI 5333 | DBMS                                |   11002 |  1013 | CSCI            |
+| CINF 3321 | Introduction to Information Systems |   10003 |  1014 | CSCI            |
+| CINF 4320 | Web Application Development         |   10004 |  1014 | CSCI            |
++-----------+-------------------------------------+---------+-------+-----------------+
+8 rows in set (0.012 sec)
+
+MariaDB [toyu]> SELECT DISTINCT cs.rubric, cs.number, cs.title, cl.classID, cl.facId, cl.year, cl.semester
+    -> FROM Course AS cs
+    -> inner join Class As cl on cl.courseId = cs.courseId
+    -> WHERE cs.rubric = 'CSCI' OR cs.rubric = 'CINF';
+ERROR 2006 (HY000): MySQL server has gone away
+No connection. Trying to reconnect...
+Connection id:    13
+Current database: toyu
+
++--------+--------+-------------------------------------+---------+-------+------+----------+
+| rubric | number | title                               | classID | facId | year | semester |
++--------+--------+-------------------------------------+---------+-------+------+----------+
+| CSCI   | 3333   | Data Structures                     |   10000 |  1011 | 2019 | Fall     |
+| CSCI   | 3333   | Data Structures                     |   11000 |  1011 | 2020 | Spring   |
+| CSCI   | 4333   | Design of Database Systems          |   10001 |  1011 | 2019 | Fall     |
+| CSCI   | 4333   | Design of Database Systems          |   11001 |  1012 | 2020 | Spring   |
+| CSCI   | 5333   | DBMS                                |   10002 |  1012 | 2019 | Fall     |
+| CSCI   | 5333   | DBMS                                |   11002 |  1013 | 2020 | Spring   |
+| CINF   | 3321   | Introduction to Information Systems |   10003 |  1014 | 2019 | Fall     |
+| CINF   | 3321   | Introduction to Information Systems |   11003 |  1016 | 2020 | Spring   |
+| CINF   | 4320   | Web Application Development         |   10004 |  1014 | 2019 | Fall     |
++--------+--------+-------------------------------------+---------+-------+------+----------+
+9 rows in set (0.123 sec)
+
+MariaDB [toyu]> SELECT DISTINCT CONCAT (cs.rubric,' ',cs.number) AS Course, cs.title, cl.classID, cl.facId, fl.deptCode AS "instructor dept"
+    -> FROM Course AS cs 
+    -> INNER JOIN Class AS cl ON cl.courseId = cs.courseId
+    -> INNER JOIN Faculty AS fl ON fl.facId =cl.facId
+    -> WHERE fl.deptCode = 'CSCI';
++-----------+-------------------------------------+---------+-------+-----------------+
+| Course    | title                               | classID | facId | instructor dept |
++-----------+-------------------------------------+---------+-------+-----------------+
+| CSCI 3333 | Data Structures                     |   10000 |  1011 | CSCI            |
+| CSCI 4333 | Design of Database Systems          |   10001 |  1011 | CSCI            |
+| CSCI 3333 | Data Structures                     |   11000 |  1011 | CSCI            |
+| CSCI 5333 | DBMS                                |   10002 |  1012 | CSCI            |
+| CSCI 4333 | Design of Database Systems          |   11001 |  1012 | CSCI            |
+| CSCI 5333 | DBMS                                |   11002 |  1013 | CSCI            |
+| CINF 3321 | Introduction to Information Systems |   10003 |  1014 | CSCI            |
+| CINF 4320 | Web Application Development         |   10004 |  1014 | CSCI            |
++-----------+-------------------------------------+---------+-------+-----------------+
+8 rows in set (0.008 sec)
+
+MariaDB [toyu]> SELECT DISTINCT s.stuId, s.fname, s.lname, s.major, s.minor, s.ach AS 'Accumulated credits',
+    ->        (IF(s.ach > 90, 'senior', 
+    ->            IF(s.ach >= 61 AND s.ach <= 90, 'junior', 
+    ->                'lower'))) AS status
+    -> FROM student AS s
+    -> WHERE s.minor = 'CSCI' OR s.major = 'CSCI';
++--------+-------+-------+-------+-------+---------------------+--------+
+| stuId  | fname | lname | major | minor | Accumulated credits | status |
++--------+-------+-------+-------+-------+---------------------+--------+
+| 100000 | Tony  | Hawk  | CSCI  | CINF  |                  40 | lower  |
+| 100001 | Mary  | Hawk  | CSCI  | CINF  |                  35 | lower  |
+| 100002 | David | Hawk  | CSCI  | ITEC  |                  66 | junior |
+| 100009 | Linda | King  | ARTS  | CSCI  |                 125 | senior |
++--------+-------+-------+-------+-------+---------------------+--------+
+4 rows in set (0.003 sec)
+
+MariaDB [toyu]> SELECT DISTINCT s.stuId, s.fname, s.lname, s.major, s.minor, s.ach AS 'Accumulated credits',
+    ->        (CASE
+    ->          WHEN s.ach > 90 THEN 'senior'
+    ->          WHEN s.ach >= 61 AND s.ach <= 90 THEN 'junior'
+    ->          ELSE 'lower'
+    ->        END) AS status
+    -> FROM student AS s
+    -> WHERE s.minor = 'CSCI' OR s.major = 'CSCI';
++--------+-------+-------+-------+-------+---------------------+--------+
+| stuId  | fname | lname | major | minor | Accumulated credits | status |
++--------+-------+-------+-------+-------+---------------------+--------+
+| 100000 | Tony  | Hawk  | CSCI  | CINF  |                  40 | lower  |
+| 100001 | Mary  | Hawk  | CSCI  | CINF  |                  35 | lower  |
+| 100002 | David | Hawk  | CSCI  | ITEC  |                  66 | junior |
+| 100009 | Linda | King  | ARTS  | CSCI  |                 125 | senior |
++--------+-------+-------+-------+-------+---------------------+--------+
+4 rows in set (0.007 sec)
+
+MariaDB [toyu]> SELECT DISTINCT s.stuId, s.fname, s.lname, s.major, s.minor, s.ach AS 'Accumulated credits',
+    ->        (CASE
+    ->          WHEN s.ach > 90 THEN 'senior'
+    ->          WHEN s.ach >= 61 or s.ach <= 90 THEN 'junior'
+    ->          ELSE 'lower'
+    ->        END) AS status
+    -> FROM student AS s
+    -> WHERE s.minor = 'CSCI' OR s.major = 'CSCI';
++--------+-------+-------+-------+-------+---------------------+--------+
+| stuId  | fname | lname | major | minor | Accumulated credits | status |
++--------+-------+-------+-------+-------+---------------------+--------+
+| 100000 | Tony  | Hawk  | CSCI  | CINF  |                  40 | junior |
+| 100001 | Mary  | Hawk  | CSCI  | CINF  |                  35 | junior |
+| 100002 | David | Hawk  | CSCI  | ITEC  |                  66 | junior |
+| 100009 | Linda | King  | ARTS  | CSCI  |                 125 | senior |
++--------+-------+-------+-------+-------+---------------------+--------+
+4 rows in set (0.001 sec)
+
+MariaDB [toyu]> SELECT DISTINCT s.stuId,  s.fname, s.lname, e.classID, e.grade
+    -> FROM student AS s INNER JOIN enroll AS e ON s.stuId= e.stuId
+    -> WHERE e.grade = 'NULL';
+Empty set (0.001 sec)
+
+MariaDB [toyu]> SELECT DISTINCT s.stuId,  s.fname, s.lname, e.classID, e.grade
+    -> FROM student AS s INNER JOIN enroll AS e ON s.stuId= e.stuId
+    -> WHERE e.grade = IS NULL;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'IS NULL' at line 3
+MariaDB [toyu]> SELECT DISTINCT s.stuId,  s.fname, s.lname, e.classID, e.grade
+    -> FROM student AS s 
+    -> INNER JOIN enroll AS e ON s.stuId= e.stuId
+    -> WHERE e.grade = IS NULL;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'IS NULL' at line 4
+MariaDB [toyu]> SELECT DISTINCT s.stuId, s.fname, s.lname, e.classID, e.grade
+    -> FROM student AS s 
+    -> INNER JOIN enroll AS e 
+    -> ON s.stuId = e.stuId
+    -> WHERE e.grade IS NULL;
++--------+-------+---------+---------+-------+
+| stuId  | fname | lname   | classID | grade |
++--------+-------+---------+---------+-------+
+| 100001 | Mary  | Hawk    |   10000 | NULL  |
+| 100005 | Linda | Johnson |   10003 | NULL  |
++--------+-------+---------+---------+-------+
+2 rows in set (0.006 sec)
+
+MariaDB [toyu]> SELECT DISTINCT s.stuId, s.fname, s.lname, e.classID, e.grade
+    -> FROM student AS s 
+    -> INNER JOIN enroll AS e 
+    -> ON s.stuId = e.stuId
+    -> WHERE e.grade IS NULL OR e.grade ='D' OR e.grade='F';
++--------+-------+---------+---------+-------+
+| stuId  | fname | lname   | classID | grade |
++--------+-------+---------+---------+-------+
+| 100001 | Mary  | Hawk    |   10000 | NULL  |
+| 100005 | Linda | Johnson |   10003 | NULL  |
+| 100002 | David | Hawk    |   10003 | D     |
+| 100000 | Tony  | Hawk    |   11001 | D     |
+| 100007 | Ben   | Zico    |   10007 | F     |
++--------+-------+---------+---------+-------+
+5 rows in set (0.001 sec)
+
+MariaDB [toyu]> SELECT DISTINCT s.stuId, s.fname, s.lname, e.classID, e.grade
+    -> FROM student AS s 
+    -> INNER JOIN enroll AS e 
+    -> ON s.stuId = e.stuId
+    -> WHERE e.grade IS NULL OR e.grade ='D' OR e.grade='F'
+    -> ORDER BY s.stuId ASC;
++--------+-------+---------+---------+-------+
+| stuId  | fname | lname   | classID | grade |
++--------+-------+---------+---------+-------+
+| 100000 | Tony  | Hawk    |   11001 | D     |
+| 100001 | Mary  | Hawk    |   10000 | NULL  |
+| 100002 | David | Hawk    |   10003 | D     |
+| 100005 | Linda | Johnson |   10003 | NULL  |
+| 100007 | Ben   | Zico    |   10007 | F     |
++--------+-------+---------+---------+-------+
+5 rows in set (0.001 sec)
+
+MariaDB [toyu]> SELECT DISTINCT s.stuId, s.major, s.minor, e.classID, c.title, d.deptName AS 'Offered by', e.enroll
+    -> FROM student AS s
+    -> INNER JOIN enroll AS e
+    -> ON s.stuId= e.stuId
+    -> INNER JOIN course AS c
+    -> ON c.rubric = s.major
+    -> INNER JOIN department AS d
+    -> ON c.rubric = d.deptCode
+    -> WHERE e.grade = 'minor' OR 'major';
+ERROR 1054 (42S22): Unknown column 'e.enroll' in 'field list'
+MariaDB [toyu]> 
+MariaDB [toyu]> SELECT DISTINCT s.stuId, s.major, s.minor, e.classID, c.title, d.deptName AS 'Offered by', e.grade
+    -> FROM student AS s
+    -> INNER JOIN enroll AS e
+    -> ON s.stuId= e.stuId
+    -> INNER JOIN course AS c
+    -> ON c.rubric = s.major
+    -> INNER JOIN department AS d
+    -> ON c.rubric = d.deptCode
+    -> WHERE e.grade = 'minor' OR 'major';
+Empty set, 5 warnings (0.008 sec)
+
+MariaDB [toyu]> SELECT DISTINCT s.stuId, s.major, s.minor, e.classID, c.title, d.deptName AS 'Offered by', e.grade
+    -> FROM student AS s
+    -> INNER JOIN enroll AS e
+    -> ON s.stuId= e.stuId
+    -> INNER JOIN course AS c
+    -> ON c.rubric = s.major
+    -> INNER JOIN department AS d
+    -> ON c.rubric = d.deptCode
+    -> WHERE e.grade IN ('minor', 'major');
+Empty set (0.001 sec)
+
+MariaDB [toyu]> SELECT DISTINCT s.stuId, s.major, s.minor, e.classID, c.title, d.deptName AS 'Offered by', e.grade
+    -> FROM student AS s
+    -> INNER JOIN enroll AS e
+    -> ON s.stuId= e.stuId
+    -> INNER JOIN course AS c
+    -> ON c.rubric = s.major
+    -> INNER JOIN department AS d
+    -> ON c.rubric = d.deptCode
+    -> WHERE e.grade IN ('minor', 'major');
+Empty set (0.001 sec)
+
+MariaDB [toyu]> 
+MariaDB [toyu]> SELECT DISTINCT s.stuId, s.major, s.minor, e.classID, c.title, d.deptName AS 'Offered by', e.grade
+    -> FROM student AS s
+    -> INNER JOIN enroll AS e
+    -> ON s.stuId= e.stuId
+    -> INNER JOIN course AS c
+    -> ON c.rubric = e.classID
+    -> INNER JOIN department AS d
+    -> ON c.rubric = d.deptCode
+    -> WHERE s.major = 'minor' OR s.minor = 'major';
+Empty set (0.007 sec)
+
+MariaDB [toyu]> SELECT DISTINCT s.stuId, s.major, s.minor, e.classID, c.title, d.deptName AS 'Offered by', e.grade
+    -> FROM student AS s
+    -> INNER JOIN enroll AS e
+    -> ON s.stuId= e.stuId
+    -> INNER JOIN course AS c
+    -> ON c.rubric = e.classID
+    -> INNER JOIN department AS d
+    -> ON c.rubric = d.deptCode
+    -> WHERE s.major IS NOT NULL AND s.minor IS
+    -> 
+    -> 
+    -> 
+    -> 
+    -> 
+    -> b d
+    -> 
+    -> SELECT DISTINCT s.stuId, s.major, s.minor, e.classID, c.title, d.deptName AS 'Offered by', e.grade
+    -> FROM student AS s
+    -> INNER JOIN enroll AS e
+    -> ON s.stuId= e.stuId
+    -> INNER JOIN course AS c
+    -> ON c.rubric = e.classID
+    -> INNER JOIN department AS d
+    -> ON c.rubric = d.deptCode
+    -> WHERE s.major IS NOT NULL AND s.minor IS NOT NULL;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'b d
+
+SELECT DISTINCT s.stuId, s.major, s.minor, e.classID, c.title, d.deptNam...' at line 15
+MariaDB [toyu]> 
+MariaDB [toyu]> SELECT DISTINCT s.stuId, s.major, s.minor, e.classID, c.title, d.deptName AS 'Offered by', e.grade
+    -> FROM student AS s
+    -> INNER JOIN enroll AS e
+    -> ON s.stuId= e.stuId
+    -> INNER JOIN course AS c
+    -> ON c.rubric = e.classID
+    -> INNER JOIN department AS d
+    -> ON c.rubric = d.deptCode
+    -> WHERE s.major IS NOT NULL AND s.minor IS NOT NULL;
+Empty set, 11 warnings (0.003 sec)
+
+MariaDB [toyu]> 
+MariaDB [toyu]> SELECT DISTINCT s.stuId, s.major, s.minor, e.classID, c.title, d.deptName AS 'Offered by', e.grade
+    -> FROM student AS s
+    -> INNER JOIN enroll AS e
+    -> ON s.stuId= e.stuId
+    -> INNER JOIN course AS c
+    -> ON c.rubric = s.major
+    -> INNER JOIN department AS d
+    -> ON c.rubric = d.deptCode
+    -> WHERE s.major IS NOT NULL AND s.minor IS NOT NULL;
++--------+-------+-------+---------+-------------------------------------+------------------------------+-------+
+| stuId  | major | minor | classID | title                               | Offered by                   | grade |
++--------+-------+-------+---------+-------------------------------------+------------------------------+-------+
+| 100000 | CSCI  | CINF  |   10000 | Data Structures                     | Computer Science             | A     |
+| 100000 | CSCI  | CINF  |   10001 | Data Structures                     | Computer Science             | A     |
+| 100000 | CSCI  | CINF  |   10002 | Data Structures                     | Computer Science             | B+    |
+| 100000 | CSCI  | CINF  |   10003 | Data Structures                     | Computer Science             | C     |
+| 100000 | CSCI  | CINF  |   10004 | Data Structures                     | Computer Science             | A-    |
+| 100000 | CSCI  | CINF  |   11001 | Data Structures                     | Computer Science             | D     |
+| 100000 | CSCI  | CINF  |   10000 | Design of Database Systems          | Computer Science             | A     |
+| 100000 | CSCI  | CINF  |   10001 | Design of Database Systems          | Computer Science             | A     |
+| 100000 | CSCI  | CINF  |   10002 | Design of Database Systems          | Computer Science             | B+    |
+| 100000 | CSCI  | CINF  |   10003 | Design of Database Systems          | Computer Science             | C     |
+| 100000 | CSCI  | CINF  |   10004 | Design of Database Systems          | Computer Science             | A-    |
+| 100000 | CSCI  | CINF  |   11001 | Design of Database Systems          | Computer Science             | D     |
+| 100000 | CSCI  | CINF  |   10000 | DBMS                                | Computer Science             | A     |
+| 100000 | CSCI  | CINF  |   10001 | DBMS                                | Computer Science             | A     |
+| 100000 | CSCI  | CINF  |   10002 | DBMS                                | Computer Science             | B+    |
+| 100000 | CSCI  | CINF  |   10003 | DBMS                                | Computer Science             | C     |
+| 100000 | CSCI  | CINF  |   10004 | DBMS                                | Computer Science             | A-    |
+| 100000 | CSCI  | CINF  |   11001 | DBMS                                | Computer Science             | D     |
+| 100001 | CSCI  | CINF  |   10000 | Data Structures                     | Computer Science             | NULL  |
+| 100001 | CSCI  | CINF  |   10001 | Data Structures                     | Computer Science             | A-    |
+| 100001 | CSCI  | CINF  |   10000 | Design of Database Systems          | Computer Science             | NULL  |
+| 100001 | CSCI  | CINF  |   10001 | Design of Database Systems          | Computer Science             | A-    |
+| 100001 | CSCI  | CINF  |   10000 | DBMS                                | Computer Science             | NULL  |
+| 100001 | CSCI  | CINF  |   10001 | DBMS                                | Computer Science             | A-    |
+| 100002 | CSCI  | ITEC  |   10000 | Data Structures                     | Computer Science             | B-    |
+| 100002 | CSCI  | ITEC  |   10002 | Data Structures                     | Computer Science             | B+    |
+| 100002 | CSCI  | ITEC  |   10003 | Data Structures                     | Computer Science             | D     |
+| 100002 | CSCI  | ITEC  |   10000 | Design of Database Systems          | Computer Science             | B-    |
+| 100002 | CSCI  | ITEC  |   10002 | Design of Database Systems          | Computer Science             | B+    |
+| 100002 | CSCI  | ITEC  |   10003 | Design of Database Systems          | Computer Science             | D     |
+| 100002 | CSCI  | ITEC  |   10000 | DBMS                                | Computer Science             | B-    |
+| 100002 | CSCI  | ITEC  |   10002 | DBMS                                | Computer Science             | B+    |
+| 100002 | CSCI  | ITEC  |   10003 | DBMS                                | Computer Science             | D     |
+| 100005 | CINF  | ENGL  |   10003 | Introduction to Information Systems | Computer Information Systems | NULL  |
+| 100005 | CINF  | ENGL  |   10004 | Introduction to Information Systems | Computer Information Systems | A-    |
+| 100005 | CINF  | ENGL  |   10005 | Introduction to Information Systems | Computer Information Systems | A-    |
+| 100005 | CINF  | ENGL  |   10006 | Introduction to Information Systems | Computer Information Systems | B+    |
+| 100005 | CINF  | ENGL  |   10003 | Web Application Development         | Computer Information Systems | NULL  |
+| 100005 | CINF  | ENGL  |   10004 | Web Application Development         | Computer Information Systems | A-    |
+| 100005 | CINF  | ENGL  |   10005 | Web Application Development         | Computer Information Systems | A-    |
+| 100005 | CINF  | ENGL  |   10006 | Web Application Development         | Computer Information Systems | B+    |
+| 100006 | CINF  | ITEC  |   10004 | Introduction to Information Systems | Computer Information Systems | C+    |
+| 100006 | CINF  | ITEC  |   10005 | Introduction to Information Systems | Computer Information Systems | A     |
+| 100006 | CINF  | ITEC  |   10004 | Web Application Development         | Computer Information Systems | C+    |
+| 100006 | CINF  | ITEC  |   10005 | Web Application Development         | Computer Information Systems | A     |
++--------+-------+-------+---------+-------------------------------------+------------------------------+-------+
+45 rows in set (0.006 sec)
+
+MariaDB [toyu]> SELECT DISTINCT s.stuId, s.major, s.minor, e.classID, c.title, d.deptName AS 'Offered by', e.grade, cl.classID
+    -> FROM student AS s
+    -> INNER JOIN enroll AS e
+    -> ON s.stuId = e.stuId
+    -> INNER JOIN class AS cl
+    -> ON cl.classID = e.classID
+    -> INNER JOIN cousr AS C 
+    -> ON cl.courseId = c.CourseId
+    -> INNER JOIN department AS d
+    -> ON c.rubric = d.deptCode
+    -> WHERE s.major IS NOT NULL AND s.minor IS NOT NULL;
+ERROR 1146 (42S02): Table 'toyu.cousr' doesn't exist
+MariaDB [toyu]> SELECT DISTINCT s.stuId, s.major, s.minor, e.classID, c.title, d.deptName AS 'Offered by', e.grade, cl.classID
+    -> FROM student AS s
+    -> INNER JOIN enroll AS e
+    -> ON s.stuId = e.stuId
+    -> INNER JOIN class AS cl
+    -> ON cl.classID = e.classID
+    -> INNER JOIN course AS C 
+    -> ON cl.courseId = c.CourseId
+    -> INNER JOIN department AS d
+    -> ON c.rubric = d.deptCode
+    -> WHERE s.major IS NOT NULL AND s.minor IS NOT NULL;
++--------+-------+-------+---------+-------------------------------------+------------------------------+-------+---------+
+| stuId  | major | minor | classID | title                               | Offered by                   | grade | classID |
++--------+-------+-------+---------+-------------------------------------+------------------------------+-------+---------+
+| 100000 | CSCI  | CINF  |   10000 | Data Structures                     | Computer Science             | A     |   10000 |
+| 100000 | CSCI  | CINF  |   10001 | Design of Database Systems          | Computer Science             | A     |   10001 |
+| 100000 | CSCI  | CINF  |   10002 | DBMS                                | Computer Science             | B+    |   10002 |
+| 100000 | CSCI  | CINF  |   10003 | Introduction to Information Systems | Computer Information Systems | C     |   10003 |
+| 100000 | CSCI  | CINF  |   10004 | Web Application Development         | Computer Information Systems | A-    |   10004 |
+| 100000 | CSCI  | CINF  |   11001 | Design of Database Systems          | Computer Science             | D     |   11001 |
+| 100001 | CSCI  | CINF  |   10000 | Data Structures                     | Computer Science             | NULL  |   10000 |
+| 100001 | CSCI  | CINF  |   10001 | Design of Database Systems          | Computer Science             | A-    |   10001 |
+| 100002 | CSCI  | ITEC  |   10000 | Data Structures                     | Computer Science             | B-    |   10000 |
+| 100002 | CSCI  | ITEC  |   10002 | DBMS                                | Computer Science             | B+    |   10002 |
+| 100002 | CSCI  | ITEC  |   10003 | Introduction to Information Systems | Computer Information Systems | D     |   10003 |
+| 100005 | CINF  | ENGL  |   10003 | Introduction to Information Systems | Computer Information Systems | NULL  |   10003 |
+| 100005 | CINF  | ENGL  |   10004 | Web Application Development         | Computer Information Systems | A-    |   10004 |
+| 100005 | CINF  | ENGL  |   10005 | Database Development                | Information Technology       | A-    |   10005 |
+| 100005 | CINF  | ENGL  |   10006 | Introduction to Scripting           | Information Technology       | B+    |   10006 |
+| 100006 | CINF  | ITEC  |   10004 | Web Application Development         | Computer Information Systems | C+    |   10004 |
+| 100006 | CINF  | ITEC  |   10005 | Database Development                | Information Technology       | A     |   10005 |
++--------+-------+-------+---------+-------------------------------------+------------------------------+-------+---------+
+17 rows in set (0.008 sec)
+
+MariaDB [toyu]> SELECT DISTINCT s.stuId, s.major, s.minor, c.title, d.deptName AS 'Offered by', e.grade, cl.classID
+    -> FROM student AS s
+    -> INNER JOIN enroll AS e
+    -> ON s.stuId = e.stuId
+    -> INNER JOIN class AS cl
+    -> ON cl.classID = e.classID
+    -> INNER JOIN course AS C 
+    -> ON cl.courseId = c.CourseId
+    -> INNER JOIN department AS d
+    -> ON c.rubric = d.deptCode
+    -> WHERE s.major IS NOT NULL AND s.minor IS NOT NULL;
++--------+-------+-------+-------------------------------------+------------------------------+-------+---------+
+| stuId  | major | minor | title                               | Offered by                   | grade | classID |
++--------+-------+-------+-------------------------------------+------------------------------+-------+---------+
+| 100000 | CSCI  | CINF  | Data Structures                     | Computer Science             | A     |   10000 |
+| 100000 | CSCI  | CINF  | Design of Database Systems          | Computer Science             | A     |   10001 |
+| 100000 | CSCI  | CINF  | DBMS                                | Computer Science             | B+    |   10002 |
+| 100000 | CSCI  | CINF  | Introduction to Information Systems | Computer Information Systems | C     |   10003 |
+| 100000 | CSCI  | CINF  | Web Application Development         | Computer Information Systems | A-    |   10004 |
+| 100000 | CSCI  | CINF  | Design of Database Systems          | Computer Science             | D     |   11001 |
+| 100001 | CSCI  | CINF  | Data Structures                     | Computer Science             | NULL  |   10000 |
+| 100001 | CSCI  | CINF  | Design of Database Systems          | Computer Science             | A-    |   10001 |
+| 100002 | CSCI  | ITEC  | Data Structures                     | Computer Science             | B-    |   10000 |
+| 100002 | CSCI  | ITEC  | DBMS                                | Computer Science             | B+    |   10002 |
+| 100002 | CSCI  | ITEC  | Introduction to Information Systems | Computer Information Systems | D     |   10003 |
+| 100005 | CINF  | ENGL  | Introduction to Information Systems | Computer Information Systems | NULL  |   10003 |
+| 100005 | CINF  | ENGL  | Web Application Development         | Computer Information Systems | A-    |   10004 |
+| 100005 | CINF  | ENGL  | Database Development                | Information Technology       | A-    |   10005 |
+| 100005 | CINF  | ENGL  | Introduction to Scripting           | Information Technology       | B+    |   10006 |
+| 100006 | CINF  | ITEC  | Web Application Development         | Computer Information Systems | C+    |   10004 |
+| 100006 | CINF  | ITEC  | Database Development                | Information Technology       | A     |   10005 |
++--------+-------+-------+-------------------------------------+------------------------------+-------+---------+
+17 rows in set (0.001 sec)
+
+MariaDB [toyu]> SELECT DISTINCT s.stuId, s.major, s.minor, cl.classID, c.title, d.deptName AS 'Offered by', e.grade, 
+    -> FROM student AS s
+    -> INNER JOIN enroll AS e
+    -> ON s.stuId = e.stuId
+    -> INNER JOIN class AS cl
+    -> ON cl.classID = e.classID
+    -> INNER JOIN course AS C 
+    -> ON cl.courseId = c.CourseId
+    -> INNER JOIN department AS d
+    -> ON c.rubric = d.deptCode
+    -> WHERE s.major IS NOT NULL AND s.minor IS NOT NULL;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'FROM student AS s
+INNER JOIN enroll AS e
+ON s.stuId = e.stuId
+INNER JOIN clas...' at line 2
+MariaDB [toyu]> 
+MariaDB [toyu]> SELECT DISTINCT s.stuId, s.major, s.minor, cl.classID, c.title, d.deptName AS 'Offered by', e.grade, 
+    -> FROM student AS s
+    -> INNER JOIN enroll AS e
+    -> ON s.stuId = e.stuId
+    -> INNER JOIN class AS cl
+    -> ON cl.classID = e.classID
+    -> INNER JOIN course AS C 
+    -> ON cl.courseId = c.CourseId
+    -> INNER JOIN department AS d
+    -> ON c.rubric = d.deptCode
+    -> WHERE s.major IS NOT NULL AND s.minor IS NOT NULL;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'FROM student AS s
+INNER JOIN enroll AS e
+ON s.stuId = e.stuId
+INNER JOIN clas...' at line 2
+MariaDB [toyu]> SELECT DISTINCT s.stuId, s.major, s.minor, cl.classID, c.title, d.deptName AS 'Offered by', e.grade, 
+    -> FROM student AS s
+    -> INNER JOIN enroll AS e
+    -> ON s.stuId = cl.stuId
+    -> INNER JOIN class AS cl
+    -> ON cl.classID = e.classID
+    -> INNER JOIN course AS C 
+    -> ON cl.courseId = c.CourseId
+    -> INNER JOIN department AS d
+    -> ON c.rubric = d.deptCode
+    -> WHERE s.major IS NOT NULL AND s.minor IS NOT NULL;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'FROM student AS s
+INNER JOIN enroll AS e
+ON s.stuId = cl.stuId
+INNER JOIN cla...' at line 2
+MariaDB [toyu]> SELECT DISTINCT s.stuId, s.major, s.minor, cl.classID, co.title AS 'course', d.deptName AS 'offered by', e.grade
+    -> FROM student AS s
+    -> INNER JOIN enroll  AS e 
+    -> ON e.stuId = s.stuId
+    -> INNER JOIN class AS cl 
+    -> ON cl.classID = e.classID
+    -> INNER JOIN course AS co 
+    -> ON co.courseId = cl.courseId
+    -> INNER JOIN department AS d 
+    -> ON d.deptcode = co.rubric
+    -> WHERE s.major IS NOT NULL AND s.minor IS NOT NULL;
++--------+-------+-------+---------+-------------------------------------+------------------------------+-------+
+| stuId  | major | minor | classID | course                              | offered by                   | grade |
++--------+-------+-------+---------+-------------------------------------+------------------------------+-------+
+| 100000 | CSCI  | CINF  |   10000 | Data Structures                     | Computer Science             | A     |
+| 100000 | CSCI  | CINF  |   10001 | Design of Database Systems          | Computer Science             | A     |
+| 100000 | CSCI  | CINF  |   10002 | DBMS                                | Computer Science             | B+    |
+| 100000 | CSCI  | CINF  |   10003 | Introduction to Information Systems | Computer Information Systems | C     |
+| 100000 | CSCI  | CINF  |   10004 | Web Application Development         | Computer Information Systems | A-    |
+| 100000 | CSCI  | CINF  |   11001 | Design of Database Systems          | Computer Science             | D     |
+| 100001 | CSCI  | CINF  |   10000 | Data Structures                     | Computer Science             | NULL  |
+| 100001 | CSCI  | CINF  |   10001 | Design of Database Systems          | Computer Science             | A-    |
+| 100002 | CSCI  | ITEC  |   10000 | Data Structures                     | Computer Science             | B-    |
+| 100002 | CSCI  | ITEC  |   10002 | DBMS                                | Computer Science             | B+    |
+| 100002 | CSCI  | ITEC  |   10003 | Introduction to Information Systems | Computer Information Systems | D     |
+| 100005 | CINF  | ENGL  |   10003 | Introduction to Information Systems | Computer Information Systems | NULL  |
+| 100005 | CINF  | ENGL  |   10004 | Web Application Development         | Computer Information Systems | A-    |
+| 100005 | CINF  | ENGL  |   10005 | Database Development                | Information Technology       | A-    |
+| 100005 | CINF  | ENGL  |   10006 | Introduction to Scripting           | Information Technology       | B+    |
+| 100006 | CINF  | ITEC  |   10004 | Web Application Development         | Computer Information Systems | C+    |
+| 100006 | CINF  | ITEC  |   10005 | Database Development                | Information Technology       | A     |
++--------+-------+-------+---------+-------------------------------------+------------------------------+-------+
+17 rows in set (0.002 sec)
+
+MariaDB [toyu]> 

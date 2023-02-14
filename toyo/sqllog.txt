@@ -1,0 +1,7 @@
+MariaDB [(none)]> use toyu
+Database changed
+s
+
+
+
+
